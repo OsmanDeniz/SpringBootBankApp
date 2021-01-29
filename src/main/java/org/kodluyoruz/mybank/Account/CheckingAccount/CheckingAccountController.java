@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("api/v1/customer/{id}/account/type")
+@RequestMapping("api/v1/customer/{id}/account/type/checking")
 public class CheckingAccountController {
     private final CheckingAccountService checkingAccountService;
     private final CustomerService customerService;
@@ -24,11 +24,10 @@ public class CheckingAccountController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CheckingAccountDto create(@RequestParam String name, @PathVariable("id") int customer_id, @Valid @RequestBody CheckingAccountDto dto) throws Exception {
+    public CheckingAccountDto create(@PathVariable("id") int customer_id, @Valid @RequestBody CheckingAccountDto dto) throws Exception {
         CheckingAccountDto checkingAccountDto = null;
         CheckingAccount checkingAccount = dto.toCheckingDto();
 
-        if (!name.equals("checking")) throw new Exception("Hesap tipi gecersiz.");
         if (!customerService.isCustomerExists(customer_id)) throw new Exception("Kullanici bulunamadi");
 
         AccountType a = accountTypeService.findAccountByName("Vadesiz");
@@ -36,9 +35,7 @@ public class CheckingAccountController {
         Customer customer = customerService.findById(customer_id);
         customer.setCheckingAccount(checkingAccount);
 
-        if (name.equals("checking")) {
-            checkingAccount.setAccountType(a);
-        } else throw new Exception("Vadesiz hesap adini kontrol ediniz.");
+        checkingAccount.setAccountType(a);
 
         checkingAccountDto = checkingAccountService.create(checkingAccount).toCheckingAccountDto();
         customerService.update(customer);

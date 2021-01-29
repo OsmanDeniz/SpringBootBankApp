@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.kodluyoruz.mybank.Account.CheckingAccount.CheckingAccount;
+import org.kodluyoruz.mybank.Account.DepositAccount.DepositAccount;
 import org.kodluyoruz.mybank.Address.Address;
 
 import javax.persistence.*;
@@ -33,6 +34,10 @@ public class Customer {
     @JoinColumn(name = "iban_checking_account")
     private CheckingAccount checkingAccount;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "iban_deposit_account")
+    private DepositAccount depositAccount;
+
     public CustomerDto toCustomerDto() {
         return CustomerDto.builder()
                 .id(this.id)
@@ -43,6 +48,7 @@ public class Customer {
                 .tcKimlikNo(this.tcKimlikNo)
                 .address_id(this.address_id)
                 .checkingAccount(this.checkingAccount)
+                .depositAccount(this.depositAccount)
                 .build();
     }
 

@@ -2,6 +2,7 @@ package org.kodluyoruz.mybank.Customer;
 
 import lombok.*;
 import org.kodluyoruz.mybank.Account.CheckingAccount.CheckingAccount;
+import org.kodluyoruz.mybank.Account.DepositAccount.DepositAccount;
 import org.kodluyoruz.mybank.Address.Address;
 import org.springframework.validation.annotation.Validated;
 
@@ -26,6 +27,7 @@ public class CustomerDto {
     private String gender;
     private Address address_id;
     private CheckingAccount checkingAccount;
+    private DepositAccount depositAccount;
 
     public Customer toCustomer() {
         return Customer.builder()
@@ -37,6 +39,7 @@ public class CustomerDto {
                 .tcKimlikNo(this.tcKimlikNo)
                 .address_id(address_id)
                 .checkingAccount(this.checkingAccount)
+                .depositAccount(this.depositAccount)
                 .build();
     }
 }
