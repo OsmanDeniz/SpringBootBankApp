@@ -1,4 +1,4 @@
-package org.kodluyoruz.mybank.Address;
+package org.kodluyoruz.mybank.Customer.Address;
 
 import org.kodluyoruz.mybank.Customer.CustomerService;
 import org.springframework.http.HttpStatus;

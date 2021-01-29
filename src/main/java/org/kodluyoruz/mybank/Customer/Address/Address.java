@@ -1,11 +1,10 @@
-package org.kodluyoruz.mybank.Address;
+package org.kodluyoruz.mybank.Customer.Address;
 
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.kodluyoruz.mybank.Customer.Customer;
 
 import javax.persistence.*;
 

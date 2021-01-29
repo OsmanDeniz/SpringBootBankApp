@@ -1,8 +1,6 @@
 package org.kodluyoruz.mybank.Customer;
 
 
-import org.kodluyoruz.mybank.Address.Address;
-import org.kodluyoruz.mybank.Address.AddressService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 

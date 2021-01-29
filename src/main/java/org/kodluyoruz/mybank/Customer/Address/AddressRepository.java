@@ -1,4 +1,4 @@
-package org.kodluyoruz.mybank.Address;
+package org.kodluyoruz.mybank.Customer.Address;
 
 import org.springframework.data.repository.CrudRepository;
 

@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.kodluyoruz.mybank.Account.CheckingAccount.CheckingAccount;
 import org.kodluyoruz.mybank.Account.DepositAccount.DepositAccount;
-import org.kodluyoruz.mybank.Address.Address;
+import org.kodluyoruz.mybank.Customer.Address.Address;
 
 import javax.persistence.*;
 

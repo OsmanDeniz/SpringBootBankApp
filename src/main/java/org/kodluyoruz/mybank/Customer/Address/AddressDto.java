@@ -1,8 +1,7 @@
-package org.kodluyoruz.mybank.Address;
+package org.kodluyoruz.mybank.Customer.Address;
 
 
 import lombok.*;
-import org.kodluyoruz.mybank.Customer.Customer;
 import org.springframework.validation.annotation.Validated;
 
 @Builder

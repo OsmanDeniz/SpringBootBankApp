@@ -1,6 +1,6 @@
 package org.kodluyoruz.mybank.Customer;
 
-import org.kodluyoruz.mybank.Address.Address;
+import org.kodluyoruz.mybank.Customer.Address.Address;
 import org.springframework.stereotype.Service;
 
 @Service

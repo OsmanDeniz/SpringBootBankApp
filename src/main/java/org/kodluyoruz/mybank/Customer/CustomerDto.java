@@ -3,7 +3,7 @@ package org.kodluyoruz.mybank.Customer;
 import lombok.*;
 import org.kodluyoruz.mybank.Account.CheckingAccount.CheckingAccount;
 import org.kodluyoruz.mybank.Account.DepositAccount.DepositAccount;
-import org.kodluyoruz.mybank.Address.Address;
+import org.kodluyoruz.mybank.Customer.Address.Address;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.NotBlank;
