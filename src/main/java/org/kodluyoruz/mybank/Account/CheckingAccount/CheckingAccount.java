@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
+import org.kodluyoruz.mybank.Account.Card.CashCard.CashCard;
 import org.kodluyoruz.mybank.Account.Type.AccountType;
 
 import javax.persistence.*;
@@ -29,7 +30,10 @@ public class CheckingAccount {
     @JoinColumn(name = "account_type_id")
     private AccountType accountType;
 
-    //card id
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "cash_card_number")
+    private CashCard cashCard;
+
     private boolean status = true;
 
     public CheckingAccountDto toCheckingAccountDto() {
@@ -39,6 +43,7 @@ public class CheckingAccount {
                 .balance(this.balance)
                 .created_at(this.created_at)
                 .accountType(this.accountType)
+                .cashCard(this.cashCard)
                 .status(this.status).build();
     }
 }

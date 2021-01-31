@@ -1,6 +1,8 @@
 package org.kodluyoruz.mybank.Account.CheckingAccount;
 
 import lombok.*;
+import org.kodluyoruz.mybank.Account.Card.CashCard.CashCard;
+import org.kodluyoruz.mybank.Account.Card.CreditCard.CreditCard;
 import org.kodluyoruz.mybank.Account.Type.AccountType;
 import org.springframework.validation.annotation.Validated;
 
@@ -18,8 +20,7 @@ public class CheckingAccountDto {
     private double balance = 0;
 
     private LocalDateTime created_at = LocalDateTime.now();
-
-    //card id
+    private CashCard cashCard;
 
     private boolean status = true;
     private AccountType accountType;
@@ -31,6 +32,7 @@ public class CheckingAccountDto {
                 .balance(this.balance)
                 .created_at(this.created_at)
                 .accountType(this.accountType)
+                .cashCard(this.cashCard)
                 .status(this.status).build();
     }
 

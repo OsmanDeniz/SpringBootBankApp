@@ -14,6 +14,16 @@ public class CheckingAccountService {
         return checkingAccountRepository.save(checkingAccount);
     }
 
+    public CheckingAccount findByIban(String account_iban) {
+        return checkingAccountRepository.findByIban(account_iban);
+    }
+
+    public boolean isAccountExists(String iban) {
+        return checkingAccountRepository.existsById(iban);
+    }
 
 
+    public void update(CheckingAccount checkingAccount) {
+        checkingAccountRepository.save(checkingAccount);
+    }
 }
