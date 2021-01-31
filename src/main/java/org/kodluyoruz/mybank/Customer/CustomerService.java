@@ -34,4 +34,8 @@ public class CustomerService {
     public Customer findById(int customer_id) {
         return repository.findById(customer_id);
     }
+
+    public Customer findByIban(String iban) {
+        return repository.findByCheckingAccountIban(iban);
+    }
 }
