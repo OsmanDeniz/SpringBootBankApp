@@ -22,6 +22,7 @@ public class CreditCardDto {
     private String ccv = String.valueOf(rnd.nextInt(899) + 100);
     private Double balance;
     private Customer creditCardCustomer;
+    private String currency = "TRY";
 
     public CreditCard toCreditCard() {
         return CreditCard.builder()
@@ -29,6 +30,7 @@ public class CreditCardDto {
                 .balance(this.balance)
                 .expiration_date(this.expiration_date)
                 .ccv(this.ccv)
+                .currency(this.currency)
                 .creditCardCustomer(this.creditCardCustomer)
                 .build();
     }
