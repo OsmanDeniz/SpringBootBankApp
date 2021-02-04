@@ -4,10 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.GenericGenerator;
+import org.kodluyoruz.mybank.Account.Card.BaseCard;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
@@ -15,13 +14,13 @@ import javax.persistence.Id;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CashCard {
+public class CashCard extends BaseCard {
     @Id
-    @GeneratedValue(generator = "uuid")
-    @GenericGenerator(name = "uuid", strategy = "uuid2")
-    private String cardNumber;
-    private String expiration_date;
-    private String ccv;
+    protected String cardNumber;
+    protected String expiration_date;
+    protected String ccv;
+    protected Double balance;
+    protected String currency;
 
 
     public CashCardDto toCashCardDto() {
@@ -29,6 +28,8 @@ public class CashCard {
                 .cardNumber(this.cardNumber)
                 .expiration_date(this.expiration_date)
                 .ccv(this.ccv)
+                .balance(this.balance)
+                .currency(this.currency)
                 .build();
     }
 

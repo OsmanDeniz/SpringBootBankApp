@@ -25,7 +25,7 @@ public class CashCardController {
         if (!accountService.isAccountExists(iban)) throw new Exception("Ibana ait hesap bulunamadi");
 
         CheckingAccount checkingAccount = accountService.findByIban(iban);
-//        cardDto.setBalance(checkingAccount.getBalance());
+        cardDto.setBalance(checkingAccount.getBalance());
         CashCardDto cashCardDto = cardService.create(cardDto.toCashCard()).toCashCardDto();
 
         checkingAccount.setCashCard(cashCardDto.toCashCard());
