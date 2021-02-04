@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class DepositAccountService {
-    private DepositAccountRepository depositAccountRepository;
+    private final DepositAccountRepository depositAccountRepository;
 
     public DepositAccountService(DepositAccountRepository depositAccountRepository) {
         this.depositAccountRepository = depositAccountRepository;

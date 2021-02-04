@@ -20,11 +20,11 @@ import java.util.Map;
 @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Component
-public class MoneyCurrency implements CommandLineRunner {
+public class MoneyConverter implements CommandLineRunner {
 
     private RestTemplate restTemplate;
 
-    public MoneyCurrency(RestTemplateBuilder restTemplateBuilder) {
+    public MoneyConverter(RestTemplateBuilder restTemplateBuilder) {
         this.restTemplate = restTemplateBuilder.rootUri("https://api.exchangeratesapi.io").build();
     }
 

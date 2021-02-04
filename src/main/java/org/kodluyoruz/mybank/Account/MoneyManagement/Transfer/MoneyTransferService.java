@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class MoneyTransferService {
-    private MoneyTransferRepossitory transferRepossitory;
+    private final MoneyTransferRepossitory transferRepossitory;
 
     public MoneyTransferService(MoneyTransferRepossitory transferRepossitory) {
         this.transferRepossitory = transferRepossitory;

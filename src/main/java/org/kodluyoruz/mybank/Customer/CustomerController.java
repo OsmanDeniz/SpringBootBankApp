@@ -9,7 +9,7 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("api/v1/customer")
 public class CustomerController {
-    private CustomerService customerService;
+    private final CustomerService customerService;
 
     public CustomerController(CustomerService service) {
         this.customerService = service;
@@ -21,8 +21,6 @@ public class CustomerController {
         Customer c = new Customer();
         return customerService.create(customerDto.toCustomer()).toCustomerDto();
     }
-
-
 
 
 }

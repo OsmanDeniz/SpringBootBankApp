@@ -1,7 +1,7 @@
 package org.kodluyoruz.mybank.Account.DepositAccount;
 
 import lombok.*;
-import org.kodluyoruz.mybank.Account.Type.AccountType;
+import org.kodluyoruz.mybank.Account.AccountType.AccountType;
 import org.springframework.validation.annotation.Validated;
 
 import java.time.LocalDateTime;

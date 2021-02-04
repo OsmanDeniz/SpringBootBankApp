@@ -12,7 +12,7 @@ import javax.validation.Valid;
 
 public class CreditCardController {
     private final CreditCardService cardService;
-    private CustomerService customerService;
+    private final CustomerService customerService;
 
     public CreditCardController(CreditCardService cardService, CustomerService customerService) {
         this.cardService = cardService;

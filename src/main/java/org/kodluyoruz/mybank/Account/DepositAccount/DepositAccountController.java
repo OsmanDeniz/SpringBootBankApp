@@ -1,7 +1,7 @@
 package org.kodluyoruz.mybank.Account.DepositAccount;
 
-import org.kodluyoruz.mybank.Account.Type.AccountType;
-import org.kodluyoruz.mybank.Account.Type.AccountTypeService;
+import org.kodluyoruz.mybank.Account.AccountType.AccountType;
+import org.kodluyoruz.mybank.Account.AccountType.AccountTypeService;
 import org.kodluyoruz.mybank.Customer.Customer;
 import org.kodluyoruz.mybank.Customer.CustomerService;
 import org.springframework.http.HttpStatus;
@@ -12,9 +12,9 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("api/v1/customer/{id}/account/type/deposit")
 public class DepositAccountController {
-    private CustomerService customerService;
-    private AccountTypeService accountTypeService;
-    private DepositAccountService depositAccountService;
+    private final CustomerService customerService;
+    private final AccountTypeService accountTypeService;
+    private final DepositAccountService depositAccountService;
 
     public DepositAccountController(CustomerService customerService, AccountTypeService accountTypeService, DepositAccountService depositAccountService) {
         this.customerService = customerService;

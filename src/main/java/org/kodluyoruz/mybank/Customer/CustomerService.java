@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class CustomerService {
-    private CustomerRepository repository;
+    private final CustomerRepository repository;
 
     public CustomerService(CustomerRepository repository) {
         this.repository = repository;
@@ -19,7 +19,7 @@ public class CustomerService {
         //TODO:Bu kisim refactor edilebilir
         Customer customer = repository.findById(customerID);
         if (customer == null) throw new Exception("Kayitli kullanici bulunamadi");
-        customer.setAddress_id((Address) address);
+        customer.setAddress_id(address);
         repository.save(customer);
     }
 

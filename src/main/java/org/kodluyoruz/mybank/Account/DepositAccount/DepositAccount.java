@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
-import org.kodluyoruz.mybank.Account.Type.AccountType;
+import org.kodluyoruz.mybank.Account.AccountType.AccountType;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;

@@ -1,6 +1,6 @@
 package org.kodluyoruz.mybank.Account.MoneyManagement.Transfer;
 
-import org.kodluyoruz.mybank.Account.MoneyManagement.Converter.MoneyCurrency;
+import org.kodluyoruz.mybank.Account.MoneyManagement.Converter.MoneyConverter;
 import org.kodluyoruz.mybank.Customer.Customer;
 import org.kodluyoruz.mybank.Customer.CustomerService;
 import org.springframework.http.HttpStatus;
@@ -11,12 +11,12 @@ import org.springframework.web.bind.annotation.*;
 public class MoneyTransferController {
     private final MoneyTransferService transferService;
     private final CustomerService customerService;
-    private final MoneyCurrency moneyCurrency;
+    private final MoneyConverter moneyConverter;
 
-    public MoneyTransferController(MoneyTransferService transferService, CustomerService customerService, MoneyCurrency moneyCurrency) {
+    public MoneyTransferController(MoneyTransferService transferService, CustomerService customerService, MoneyConverter moneyConverter) {
         this.transferService = transferService;
         this.customerService = customerService;
-        this.moneyCurrency = moneyCurrency;
+        this.moneyConverter = moneyConverter;
     }
 
     @PostMapping
@@ -34,7 +34,7 @@ public class MoneyTransferController {
         String sourceCurrency = sourceCustomer.getCheckingAccount().getCurrency();
 
         if (!sourceCurrency.equals(targetCurrency)) {
-            amount = moneyCurrency.convertXtoY(moneyTransferDto.getAmount(), targetCurrency, sourceCurrency);
+            amount = moneyConverter.convertXtoY(moneyTransferDto.getAmount(), targetCurrency, sourceCurrency);
             moneyTransferDto.setAmount(amount);
         }
         moneyTransferDto.setTransferIdentity(compositeTransferIdentity);

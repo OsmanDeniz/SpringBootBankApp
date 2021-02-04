@@ -1,7 +1,7 @@
 package org.kodluyoruz.mybank.Account.CheckingAccount;
 
-import org.kodluyoruz.mybank.Account.Type.AccountType;
-import org.kodluyoruz.mybank.Account.Type.AccountTypeService;
+import org.kodluyoruz.mybank.Account.AccountType.AccountType;
+import org.kodluyoruz.mybank.Account.AccountType.AccountTypeService;
 import org.kodluyoruz.mybank.Customer.Customer;
 import org.kodluyoruz.mybank.Customer.CustomerService;
 import org.springframework.http.HttpStatus;
