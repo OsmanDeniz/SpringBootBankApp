@@ -1,4 +1,4 @@
-package org.kodluyoruz.mybank.Account.Type;
+package org.kodluyoruz.mybank.Account.AccountType;
 
 import lombok.*;
 import org.springframework.validation.annotation.Validated;

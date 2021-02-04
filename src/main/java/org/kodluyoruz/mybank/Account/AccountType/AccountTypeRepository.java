@@ -1,4 +1,4 @@
-package org.kodluyoruz.mybank.Account.Type;
+package org.kodluyoruz.mybank.Account.AccountType;
 
 import org.springframework.data.repository.CrudRepository;
 
