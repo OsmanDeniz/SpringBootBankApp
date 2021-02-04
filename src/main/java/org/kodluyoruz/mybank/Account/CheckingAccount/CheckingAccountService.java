@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class CheckingAccountService {
-    private CheckingAccountRepository checkingAccountRepository;
+    private final CheckingAccountRepository checkingAccountRepository;
 
     public CheckingAccountService(CheckingAccountRepository checkingAccountRepository) {
         this.checkingAccountRepository = checkingAccountRepository;
@@ -22,8 +22,11 @@ public class CheckingAccountService {
         return checkingAccountRepository.existsById(iban);
     }
 
-
     public void update(CheckingAccount checkingAccount) {
         checkingAccountRepository.save(checkingAccount);
+    }
+
+    public CheckingAccount findByCashCardCardNumber(String cardNumber) {
+        return checkingAccountRepository.findByCashCardCardNumber(cardNumber);
     }
 }
