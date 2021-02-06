@@ -1,24 +1,28 @@
 package org.kodluyoruz.mybank.Customer;
 
+import lombok.AllArgsConstructor;
+import org.kodluyoruz.mybank.Account.Card.CreditCard.CreditCardRepository;
+import org.kodluyoruz.mybank.Account.CheckingAccount.CheckingAccountDto;
+import org.kodluyoruz.mybank.Account.CheckingAccount.CheckingAccountService;
 import org.kodluyoruz.mybank.Customer.Address.Address;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
+@AllArgsConstructor
 public class CustomerService {
     private final CustomerRepository repository;
-
-    public CustomerService(CustomerRepository repository) {
-        this.repository = repository;
-    }
+    private final CheckingAccountService checkingAccountService;
+    private final CreditCardRepository cardRepository;
 
     public Customer create(Customer customer) {
         return this.repository.save(customer);
     }
 
     public void updateCustomer(int customerID, Address address) throws Exception {
-        //TODO:Bu kisim refactor edilebilir
         Customer customer = repository.findById(customerID);
-        if (customer == null) throw new Exception("Kayitli kullanici bulunamadi");
+        if (customer == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Kayitli kullanici bulunamadi");
         customer.setAddress_id(address);
         repository.save(customer);
     }
@@ -35,7 +39,11 @@ public class CustomerService {
         return repository.findById(customer_id);
     }
 
-    public Customer findByIban(String iban) {
-        return repository.findByCheckingAccountIban(iban);
+    public CheckingAccountDto findCustomerByCheckingAccount_Iban(String iban) {
+        return checkingAccountService.findByIban(iban).toCheckingAccountDto();
+    }
+
+    public CheckingAccountDto findCustomerByCheckingAccount_CardNumber(String cardNumber) {
+        return checkingAccountService.findByCashCardCardNumber(cardNumber).toCheckingAccountDto();
     }
 }

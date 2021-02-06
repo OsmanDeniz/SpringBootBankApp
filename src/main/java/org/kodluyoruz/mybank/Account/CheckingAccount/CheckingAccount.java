@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 import org.kodluyoruz.mybank.Account.AccountType.AccountType;
 import org.kodluyoruz.mybank.Account.Card.CashCard.CashCard;
+import org.kodluyoruz.mybank.Customer.Customer;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -23,12 +24,16 @@ public class CheckingAccount {
     private String iban;
     private String currency = "TRY";
     private double balance;
-
     private LocalDateTime created_at = LocalDateTime.now();
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "account_type_id")
     private AccountType accountType;
+
+    @ManyToOne(cascade = CascadeType.ALL, targetEntity = Customer.class)
+    @JoinColumn(name = "customer_id")
+    private Customer customer_id;
+
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "cash_card_number")
@@ -39,6 +44,7 @@ public class CheckingAccount {
     public CheckingAccountDto toCheckingAccountDto() {
         return CheckingAccountDto.builder()
                 .iban(this.iban)
+                .customer_id(this.customer_id)
                 .currency(this.currency)
                 .balance(this.balance)
                 .created_at(this.created_at)

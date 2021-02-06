@@ -7,6 +7,7 @@ import org.kodluyoruz.mybank.Customer.Address.Address;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.NotBlank;
+import java.util.Set;
 
 @Builder
 @Getter
@@ -26,8 +27,8 @@ public class CustomerDto {
     @NotBlank(message = "Cinsiyet alani zorunludur.")
     private String gender;
     private Address address_id;
-    private CheckingAccount checkingAccount;
-    private DepositAccount depositAccount;
+    private Set<CheckingAccount> checkingAccount;
+    private Set<DepositAccount> depositAccount;
 
     public Customer toCustomer() {
         return Customer.builder()
@@ -38,8 +39,6 @@ public class CustomerDto {
                 .gender(this.gender)
                 .tcKimlikNo(this.tcKimlikNo)
                 .address_id(address_id)
-                .checkingAccount(this.checkingAccount)
-                .depositAccount(this.depositAccount)
                 .build();
     }
 }

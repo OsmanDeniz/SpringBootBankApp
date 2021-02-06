@@ -1,5 +1,6 @@
 package org.kodluyoruz.mybank.Customer;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,6 +10,7 @@ import org.kodluyoruz.mybank.Account.DepositAccount.DepositAccount;
 import org.kodluyoruz.mybank.Customer.Address.Address;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Data
@@ -30,13 +32,13 @@ public class Customer {
     private Address address_id;
 
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "iban_checking_account")
-    private CheckingAccount checkingAccount;
+    @OneToMany(mappedBy = "customer_id", targetEntity = CheckingAccount.class)
+    @JsonIgnore
+    private Set<CheckingAccount> checkingAccount;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "iban_deposit_account")
-    private DepositAccount depositAccount;
+    @OneToMany(mappedBy = "customer_id", targetEntity = DepositAccount.class)
+    @JsonIgnore
+    private Set<DepositAccount> depositAccount;
 
     public CustomerDto toCustomerDto() {
         return CustomerDto.builder()
@@ -47,8 +49,6 @@ public class Customer {
                 .gender(this.gender)
                 .tcKimlikNo(this.tcKimlikNo)
                 .address_id(this.address_id)
-                .checkingAccount(this.checkingAccount)
-                .depositAccount(this.depositAccount)
                 .build();
     }
 
