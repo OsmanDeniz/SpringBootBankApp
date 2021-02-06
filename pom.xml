@@ -60,6 +60,20 @@
             <version>RELEASE</version>
             <scope>compile</scope>
         </dependency>
+
+<!--        &lt;!&ndash; Hotswap icin eklendi &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.boot</groupId>-->
+<!--            <artifactId>spring-boot-devtools</artifactId>-->
+<!--        </dependency>-->
+
+        <!-- Swagger icin eklendi -->
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-ui</artifactId>
+            <version>1.5.2</version>
+        </dependency>
+
     </dependencies>
 
     <build>
