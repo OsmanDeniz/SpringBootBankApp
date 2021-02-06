@@ -19,7 +19,6 @@ public class CashCard extends BaseCard {
     protected String cardNumber;
     protected String expiration_date;
     protected String ccv;
-    protected Double balance;
     protected String currency;
 
 
@@ -28,7 +27,6 @@ public class CashCard extends BaseCard {
                 .cardNumber(this.cardNumber)
                 .expiration_date(this.expiration_date)
                 .ccv(this.ccv)
-                .balance(this.balance)
                 .currency(this.currency)
                 .build();
     }
