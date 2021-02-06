@@ -4,6 +4,7 @@ import org.kodluyoruz.mybank.Customer.Customer;
 import org.kodluyoruz.mybank.Customer.CustomerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 
@@ -22,7 +23,8 @@ public class CreditCardController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CreditCardDto create(@PathVariable("id") int customer_id, @Valid @RequestBody CreditCardDto cardDto) throws Exception {
-        if (!customerService.isCustomerExists(customer_id)) throw new Exception("Id'ye ait musteri bulunamadi");
+        if (!customerService.isCustomerExists(customer_id))
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Id'ye ait musteri bulunamadi");
 
         Customer c = customerService.findById(customer_id);
         cardDto.setCreditCardCustomer(c);

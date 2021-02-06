@@ -9,8 +9,10 @@ import lombok.Setter;
 import lombok.ToString;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -33,15 +35,20 @@ public class MoneyConverter implements CommandLineRunner {
     }
 
     private double readCurrencyXtoY(String baseParameter, String getCurrency) throws JsonProcessingException {
-        Map<String, String> parameters = new HashMap<>();
-        parameters.put("base", baseParameter);
-        RatesEntity rates = restTemplate.getForObject("/latest?base={base}", RatesEntity.class, parameters);
+        try {
 
-        Map<String, Object> map = new ObjectMapper().convertValue(rates.getRates(), Map.class);
-        return Double.valueOf(String.valueOf(map.get(getCurrency)));
+            Map<String, String> parameters = new HashMap<>();
+            parameters.put("base", baseParameter);
+            RatesEntity rates = restTemplate.getForObject("/latest?base={base}", RatesEntity.class, parameters);
 
-//        System.out.println("+++++++++readTry++++++++++++");
-//        System.out.println(new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(rates));
+            Map<String, Object> map = new ObjectMapper().convertValue(rates.getRates(), Map.class);
+            return Double.valueOf(String.valueOf(map.get(getCurrency)));
+
+        } catch (RuntimeException exception) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Guncel veriler alinirken sorun olustu.");
+        }
+
+
     }
 
     public double convertXtoY(Double amount, String sourceCurrency, String targetCurrency) throws JsonProcessingException {

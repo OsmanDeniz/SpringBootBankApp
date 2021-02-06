@@ -2,10 +2,10 @@ package org.kodluyoruz.mybank.Account.CheckingAccount;
 
 import org.kodluyoruz.mybank.Account.AccountType.AccountType;
 import org.kodluyoruz.mybank.Account.AccountType.AccountTypeService;
-import org.kodluyoruz.mybank.Customer.Customer;
 import org.kodluyoruz.mybank.Customer.CustomerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 
@@ -28,18 +28,16 @@ public class CheckingAccountController {
         CheckingAccountDto checkingAccountDto = null;
         CheckingAccount checkingAccount = dto.toCheckingDto();
 
-        if (!customerService.isCustomerExists(customer_id)) throw new Exception("Kullanici bulunamadi");
+        if (!customerService.isCustomerExists(customer_id))
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Kullanici bulunamadi");
 
         AccountType a = accountTypeService.findAccountByName("Vadesiz");
-
-        Customer customer = customerService.findById(customer_id);
-        customer.setCheckingAccount(checkingAccount);
-
         checkingAccount.setAccountType(a);
 
+        checkingAccount.setCustomer_id(customerService.findById(customer_id));
         checkingAccountDto = checkingAccountService.create(checkingAccount).toCheckingAccountDto();
-        customerService.update(customer);
 
         return checkingAccountDto;
     }
+
 }

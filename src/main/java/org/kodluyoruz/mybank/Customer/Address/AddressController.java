@@ -3,6 +3,7 @@ package org.kodluyoruz.mybank.Customer.Address;
 import org.kodluyoruz.mybank.Customer.CustomerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 
@@ -21,7 +22,8 @@ public class AddressController {
     @ResponseStatus(HttpStatus.CREATED)
     public AddressDto create(@PathVariable("id") int customer_id, @Valid @RequestBody AddressDto addressDto) throws Exception {
         AddressDto adt = null;
-        if (!customerService.isCustomerExists(customer_id)) throw new Exception("Kullanici bulunamadi");
+        if (!customerService.isCustomerExists(customer_id))
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Kullanici bulunamadi");
         adt = addressService.create(addressDto.toAddress()).toAddressDto();
         this.customerService.updateCustomer(customer_id, adt.toAddress());
         return adt;
