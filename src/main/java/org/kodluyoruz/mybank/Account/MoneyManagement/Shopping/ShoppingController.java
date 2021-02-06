@@ -1,6 +1,7 @@
 package org.kodluyoruz.mybank.Account.MoneyManagement.Shopping;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.AllArgsConstructor;
 import org.kodluyoruz.mybank.Account.Card.BaseCard;
 import org.kodluyoruz.mybank.Account.Card.CashCard.CashCard;
@@ -10,7 +11,9 @@ import org.kodluyoruz.mybank.Account.Card.CreditCard.CreditCardService;
 import org.kodluyoruz.mybank.Account.CheckingAccount.CheckingAccount;
 import org.kodluyoruz.mybank.Account.CheckingAccount.CheckingAccountService;
 import org.kodluyoruz.mybank.Account.MoneyManagement.Converter.MoneyConverter;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Collections;
 
@@ -27,11 +30,11 @@ public class ShoppingController {
     @PostMapping
     public ShoppingDto create(@RequestBody ShoppingDto shoppingDto, @RequestParam String cardNumber) throws Exception {
         BaseCard baseCard = isExistsCardAndReturnCard(cardNumber);
-        if (baseCard.equals(null)) throw new Exception("Gecersiz Kart Bilgisi.");
+        if (baseCard == null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Gecersiz Kart Bilgisi");
         shoppingDto.setCardId(Collections.singleton(baseCard));
 
         if (baseCard instanceof CashCard) {
-            cashCardOperations(shoppingDto, cardNumber, (CashCard) baseCard);
+            cashCardOperations(shoppingDto, cardNumber);
         } else if (baseCard instanceof CreditCard) {
             creditCardOperations(shoppingDto, (CreditCard) baseCard);
         }
@@ -39,24 +42,27 @@ public class ShoppingController {
         return shoppingService.create(shoppingDto.toShopping()).toShoppingDto();
     }
 
+    private void cashCardOperations(ShoppingDto shoppingDto, String cardNumber) throws JsonProcessingException {
+        CheckingAccount cashCardAccount = checkingAccountService.findByCashCardCardNumber(cardNumber);
+        if ((!cashCardAccount.getCurrency().equals(shoppingDto.getCurrency())))
+            shoppingDto.setPrice(moneyConverter.convertXtoY(shoppingDto.getPrice(), cashCardAccount.getCurrency(), shoppingDto.getCurrency()));
+        if (shoppingDto.getPrice() > cashCardAccount.getBalance())
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Yetersiz Bakiye");
+        cashCardAccount.setBalance(cashCardAccount.getBalance() - shoppingDto.getPrice());
+        shoppingDto.setCurrency(cashCardAccount.getCurrency());
+
+        CheckingAccount checkingAccount = checkingAccountService.findByCashCardCardNumber(cardNumber);
+        checkingAccount.setBalance(cashCardAccount.getBalance());
+        checkingAccountService.update(checkingAccount);
+    }
+
     private void creditCardOperations(ShoppingDto shoppingDto, CreditCard creditCard) throws Exception {
         if ((!creditCard.getCurrency().equals(shoppingDto.getCurrency())))
             shoppingDto.setPrice(moneyConverter.convertXtoY(shoppingDto.getPrice(), creditCard.getCurrency(), shoppingDto.getCurrency()));
-        if (shoppingDto.getPrice() > creditCard.getBalance()) throw new Exception("Yetersiz bakiye");
+        if (shoppingDto.getPrice() > creditCard.getBalance())
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Yetersiz Bakiye");
         creditCard.setBalance(creditCard.getBalance() - shoppingDto.getPrice());
         shoppingDto.setCurrency(creditCard.getCurrency());
-    }
-
-    private void cashCardOperations(ShoppingDto shoppingDto, String cardNumber, CashCard cashCard) throws Exception {
-        if ((!cashCard.getCurrency().equals(shoppingDto.getCurrency())))
-            shoppingDto.setPrice(moneyConverter.convertXtoY(shoppingDto.getPrice(), cashCard.getCurrency(), shoppingDto.getCurrency()));
-        if (shoppingDto.getPrice() > cashCard.getBalance()) throw new Exception("Yetersiz bakiye");
-        cashCard.setBalance(cashCard.getBalance() - shoppingDto.getPrice());
-        shoppingDto.setCurrency(cashCard.getCurrency());
-
-        CheckingAccount checkingAccount = checkingAccountService.findByCashCardCardNumber(cardNumber);
-        checkingAccount.setBalance(cashCard.getBalance());
-        checkingAccountService.update(checkingAccount);
     }
 
 
@@ -65,6 +71,5 @@ public class ShoppingController {
         if (creditCardService.isExists(cardNumber)) return creditCardService.findByCardNumber(cardNumber);
         return null;
     }
-
 
 }
