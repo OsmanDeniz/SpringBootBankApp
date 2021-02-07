@@ -29,4 +29,9 @@ public class CheckingAccountService {
     public CheckingAccount findByCashCardCardNumber(String cardNumber) {
         return checkingAccountRepository.findByCashCardCardNumber(cardNumber);
     }
+
+    public CheckingAccount findCheckingAccountByCustomer_id(Integer customer_id) {
+        return checkingAccountRepository.findByCustomerId_Id(customer_id);
+    }
+
 }

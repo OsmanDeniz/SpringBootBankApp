@@ -6,4 +6,6 @@ public interface CreditCardRepository extends CrudRepository<CreditCard, String>
     CreditCard findByCardNumber(String cardNumber);
 
     boolean existsCreditCardByCardNumber(String cardNumber);
+
+    CreditCard findCreditCardByCreditCardCustomer_Id(Integer customerId);
 }

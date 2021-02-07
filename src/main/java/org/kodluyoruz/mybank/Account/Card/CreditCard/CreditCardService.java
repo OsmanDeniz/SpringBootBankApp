@@ -21,4 +21,8 @@ public class CreditCardService {
     public boolean isExists(String cardNumber) {
         return cardRepository.existsCreditCardByCardNumber(cardNumber);
     }
+
+    public CreditCard findCreditCardByCreditCardCustomer_Id(Integer customerId) {
+        return cardRepository.findCreditCardByCreditCardCustomer_Id(customerId);
+    }
 }

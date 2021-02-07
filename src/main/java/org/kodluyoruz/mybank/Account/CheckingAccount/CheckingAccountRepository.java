@@ -7,4 +7,5 @@ public interface CheckingAccountRepository extends CrudRepository<CheckingAccoun
 
     CheckingAccount findByCashCardCardNumber(String cardNumber);
 
+    CheckingAccount findByCustomerId_Id(Integer customerId);
 }
