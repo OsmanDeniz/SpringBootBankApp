@@ -10,6 +10,7 @@ import org.kodluyoruz.mybank.Account.DepositAccount.DepositAccount;
 import org.kodluyoruz.mybank.Customer.Address.Address;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.Set;
 
 @Entity
@@ -21,14 +22,25 @@ public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @NotBlank(message = "Kimlik numarasi zorunludur")
     private String tcKimlikNo;
+
+    @NotBlank(message = "Isim alani zorunludur")
     private String name;
+
+    @NotBlank(message = "Soyisim alani zorunludur")
     private String surname;
+
+    @NotBlank(message = "Telefon numarasi alani zorunludur")
     private String phoneNumber;
-    private String gender;
+
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id")
+    @JsonIgnore
     private Address address_id;
 
 
@@ -53,3 +65,4 @@ public class Customer {
     }
 
 }
+
