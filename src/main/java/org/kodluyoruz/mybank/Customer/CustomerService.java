@@ -4,10 +4,7 @@ import lombok.AllArgsConstructor;
 import org.kodluyoruz.mybank.Account.Card.CreditCard.CreditCardRepository;
 import org.kodluyoruz.mybank.Account.CheckingAccount.CheckingAccountDto;
 import org.kodluyoruz.mybank.Account.CheckingAccount.CheckingAccountService;
-import org.kodluyoruz.mybank.Customer.Address.Address;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @AllArgsConstructor
@@ -20,15 +17,16 @@ public class CustomerService {
         return this.repository.save(customer);
     }
 
-    public void updateCustomer(int customerID, Address address) throws Exception {
-        Customer customer = repository.findById(customerID);
-        if (customer == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Kayitli kullanici bulunamadi");
-        customer.setAddress_id(address);
+    public void update(Customer customer) {
         repository.save(customer);
     }
 
-    public void update(Customer customer) {
-        repository.save(customer);
+    public Customer findCustomerByTcKimlikNo(String identityNo) {
+        return repository.findCustomerByTcKimlikNo(identityNo);
+    }
+
+    public void deleteCustomerById(Integer customerId) {
+        repository.deleteById(customerId);
     }
 
     public boolean isCustomerExists(int customerid) {
@@ -45,5 +43,9 @@ public class CustomerService {
 
     public CheckingAccountDto findCustomerByCheckingAccount_CardNumber(String cardNumber) {
         return checkingAccountService.findByCashCardCardNumber(cardNumber).toCheckingAccountDto();
+    }
+
+    public boolean existsByTcKimlikNo(String kimlikNo) {
+        return repository.existsByTcKimlikNo(kimlikNo);
     }
 }
