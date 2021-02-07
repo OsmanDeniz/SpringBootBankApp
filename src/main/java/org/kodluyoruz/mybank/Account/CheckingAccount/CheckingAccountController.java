@@ -34,7 +34,7 @@ public class CheckingAccountController {
         AccountType a = accountTypeService.findAccountByName("Vadesiz");
         checkingAccount.setAccountType(a);
 
-        checkingAccount.setCustomer_id(customerService.findById(customer_id));
+        checkingAccount.setCustomerId(customerService.findById(customer_id));
         checkingAccountDto = checkingAccountService.create(checkingAccount).toCheckingAccountDto();
 
         return checkingAccountDto;

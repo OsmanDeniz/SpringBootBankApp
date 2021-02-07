@@ -59,7 +59,7 @@ public class MoneyTransferController {
         if (sourceCustomerAccount == null)
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Gonderici hesabi bulunamadi");
 
-        if (sourceCustomerAccount.getCustomer_id().getId() != customerId)
+        if (sourceCustomerAccount.getCustomerId().getId() != customerId)
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Gonderici ile vadesiz hesap bilgileri arasinda uyumsuzluk");
 
         if (targetCustomerAccount == null)

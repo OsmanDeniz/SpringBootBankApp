@@ -31,8 +31,8 @@ public class CheckingAccount {
     private AccountType accountType;
 
     @ManyToOne(cascade = CascadeType.ALL, targetEntity = Customer.class)
-    @JoinColumn(name = "customer_id")
-    private Customer customer_id;
+    @JoinColumn(name = "customerId")
+    private Customer customerId;
 
 
     @OneToOne(cascade = CascadeType.ALL)
@@ -44,7 +44,7 @@ public class CheckingAccount {
     public CheckingAccountDto toCheckingAccountDto() {
         return CheckingAccountDto.builder()
                 .iban(this.iban)
-                .customer_id(this.customer_id)
+                .customerId(this.customerId)
                 .currency(this.currency)
                 .balance(this.balance)
                 .created_at(this.created_at)

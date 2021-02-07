@@ -19,7 +19,7 @@ public class CheckingAccountDto {
     private String currency = "TRY";
     private double balance = 0;
     private LocalDateTime created_at = LocalDateTime.now();
-    private Customer customer_id;
+    private Customer customerId;
     private AccountType accountType;
     private CashCard cashCard;
 
@@ -28,7 +28,7 @@ public class CheckingAccountDto {
     public CheckingAccount toCheckingDto() {
         return CheckingAccount.builder()
                 .iban(this.iban)
-                .customer_id(this.customer_id)
+                .customerId(this.customerId)
                 .currency(this.currency)
                 .balance(this.balance)
                 .created_at(this.created_at)
