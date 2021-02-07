@@ -14,4 +14,7 @@ public class AddressService {
         return this.repository.save(address);
     }
 
+    public void update(Address address) {
+        repository.save(address);
+    }
 }
