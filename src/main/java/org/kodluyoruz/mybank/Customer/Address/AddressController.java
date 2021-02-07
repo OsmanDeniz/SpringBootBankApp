@@ -1,5 +1,6 @@
 package org.kodluyoruz.mybank.Customer.Address;
 
+import org.kodluyoruz.mybank.Customer.Customer;
 import org.kodluyoruz.mybank.Customer.CustomerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -22,10 +23,17 @@ public class AddressController {
     @ResponseStatus(HttpStatus.CREATED)
     public AddressDto create(@PathVariable("id") int customer_id, @Valid @RequestBody AddressDto addressDto) throws Exception {
         AddressDto adt = null;
-        if (!customerService.isCustomerExists(customer_id))
+        Customer customer = customerService.findById(customer_id);
+        if (customer == null)
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Kullanici bulunamadi");
+
         adt = addressService.create(addressDto.toAddress()).toAddressDto();
-        this.customerService.updateCustomer(customer_id, adt.toAddress());
+
+        if (customer.getAddress_id() != null)
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Kullaniciya ait adres var");
+
+        customer.setAddress_id(adt.toAddress());
+        customerService.update(customer);
         return adt;
     }
 }
