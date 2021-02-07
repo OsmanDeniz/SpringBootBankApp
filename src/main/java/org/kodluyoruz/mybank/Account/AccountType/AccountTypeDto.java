@@ -11,8 +11,7 @@ import org.springframework.validation.annotation.Validated;
 @AllArgsConstructor
 public class AccountTypeDto {
     private int id;
-    private String accountName;
-
+    private AccountTypeEnum accountName;
 
     public AccountType toAccountType() {
         return AccountType.builder()

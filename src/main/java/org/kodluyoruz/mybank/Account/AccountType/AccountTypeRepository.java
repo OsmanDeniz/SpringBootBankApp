@@ -4,8 +4,8 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface AccountTypeRepository extends CrudRepository<AccountType, Integer> {
 
-    AccountType findByAccountName(String name);
+    AccountType findByAccountName(AccountTypeEnum name);
 
-    boolean existsByAccountName(String name);
+    boolean existsByAccountName(AccountTypeEnum name);
 
 }

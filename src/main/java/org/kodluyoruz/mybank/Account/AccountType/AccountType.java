@@ -6,10 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @Data
@@ -20,12 +17,12 @@ public class AccountType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private String accountName;
+    @Enumerated(EnumType.STRING)
+    private AccountTypeEnum accountName;
 
     public AccountTypeDto toAccountTypeDto() {
         return AccountTypeDto.builder()
                 .id(this.id)
-
                 .accountName(this.accountName).build();
     }
 }

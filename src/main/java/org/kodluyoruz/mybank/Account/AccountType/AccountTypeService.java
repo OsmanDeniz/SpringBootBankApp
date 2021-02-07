@@ -14,11 +14,11 @@ public class AccountTypeService {
         return typeRepository.save(accountType);
     }
 
-    public AccountType findAccountByName(String name) {
+    public AccountType findAccountByName(AccountTypeEnum name) {
         return typeRepository.findByAccountName(name);
     }
 
-    public boolean isAccountTypeExists(String name) {
+    public boolean isAccountTypeExists(AccountTypeEnum name) {
         return typeRepository.existsByAccountName(name);
     }
 
