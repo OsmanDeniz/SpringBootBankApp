@@ -24,4 +24,12 @@ public class AccountTypeController {
         return accountTypeService.create(accountTypeDto.toAccountType()).toAccountTypeDto();
     }
 
+
+    @DeleteMapping
+    public void deleteAccountType(@RequestParam Integer accountTypeId) {
+        AccountType accountType = accountTypeService.findAccountTypeId(accountTypeId);
+        if (accountType == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Hesap turu bulunamadi.");
+        accountTypeService.deleteAccountById(accountTypeId);
+    }
+
 }

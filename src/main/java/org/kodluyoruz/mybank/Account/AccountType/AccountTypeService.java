@@ -22,4 +22,11 @@ public class AccountTypeService {
         return typeRepository.existsByAccountName(name);
     }
 
+    public AccountType findAccountTypeId(Integer id) {
+        return typeRepository.findAccountTypeById(id);
+    }
+
+    public void deleteAccountById(Integer accountTypeId) {
+        typeRepository.deleteById(accountTypeId);
+    }
 }
