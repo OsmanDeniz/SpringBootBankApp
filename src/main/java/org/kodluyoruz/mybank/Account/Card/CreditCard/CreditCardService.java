@@ -14,6 +14,10 @@ public class CreditCardService {
         return cardRepository.save(creditCard);
     }
 
+    public CreditCard update(CreditCard creditCard) {
+        return cardRepository.save(creditCard);
+    }
+
     public CreditCard findByCardNumber(String cardNumber) {
         return cardRepository.findByCardNumber(cardNumber);
     }
@@ -25,4 +29,9 @@ public class CreditCardService {
     public CreditCard findCreditCardByCreditCardCustomer_Id(Integer customerId) {
         return cardRepository.findCreditCardByCreditCardCustomer_Id(customerId);
     }
+
+    public void deleteCreditCard(String creditCardNumber) {
+        cardRepository.deleteById(creditCardNumber);
+    }
+
 }

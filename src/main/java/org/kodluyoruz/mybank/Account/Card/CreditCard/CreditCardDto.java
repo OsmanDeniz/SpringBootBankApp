@@ -20,7 +20,8 @@ public class CreditCardDto {
     private String cardNumber;
     private String expiration_date = LocalDate.now().plusYears(5).format(DateTimeFormatter.ofPattern("MM/YY"));
     private String ccv = String.valueOf(rnd.nextInt(899) + 100);
-    private Double balance;
+    private Double balance = 0.0;
+    private Double debt = 0.0;
     private Customer creditCardCustomer;
     private String currency = "TRY";
 
@@ -28,6 +29,7 @@ public class CreditCardDto {
         return CreditCard.builder()
                 .cardNumber(this.cardNumber)
                 .balance(this.balance)
+                .debt(this.debt)
                 .expiration_date(this.expiration_date)
                 .ccv(this.ccv)
                 .currency(this.currency)

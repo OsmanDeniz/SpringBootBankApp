@@ -21,6 +21,7 @@ public class CreditCard extends BaseCard {
     protected String expiration_date;
     protected String ccv;
     protected Double balance;
+    protected Double debt;
     protected String currency;
 
     @OneToOne(cascade = CascadeType.ALL)
@@ -33,6 +34,7 @@ public class CreditCard extends BaseCard {
         return CreditCardDto.builder()
                 .cardNumber(this.cardNumber)
                 .balance(this.balance)
+                .debt(this.debt)
                 .expiration_date(this.expiration_date)
                 .ccv(this.ccv)
                 .currency(this.currency)
