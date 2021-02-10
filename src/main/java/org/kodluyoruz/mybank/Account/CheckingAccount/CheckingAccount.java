@@ -26,16 +26,16 @@ public class CheckingAccount {
     private double balance;
     private LocalDateTime created_at = LocalDateTime.now();
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.PERSIST, targetEntity = AccountType.class)
     @JoinColumn(name = "account_type_id")
     private AccountType accountType;
 
-    @ManyToOne(cascade = CascadeType.ALL, targetEntity = Customer.class)
+    @ManyToOne(cascade = CascadeType.PERSIST, targetEntity = Customer.class)
     @JoinColumn(name = "customerId")
     private Customer customerId;
 
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.REMOVE, targetEntity = CashCard.class)
     @JoinColumn(name = "cash_card_number")
     private CashCard cashCard;
 

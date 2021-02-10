@@ -22,8 +22,8 @@ public class CheckingAccountService {
         return checkingAccountRepository.existsById(iban);
     }
 
-    public void update(CheckingAccount checkingAccount) {
-        checkingAccountRepository.save(checkingAccount);
+    public CheckingAccount update(CheckingAccount checkingAccount) {
+        return checkingAccountRepository.save(checkingAccount);
     }
 
     public CheckingAccount findByCashCardCardNumber(String cardNumber) {
@@ -32,6 +32,10 @@ public class CheckingAccountService {
 
     public CheckingAccount findCheckingAccountByCustomer_id(Integer customer_id) {
         return checkingAccountRepository.findByCustomerId_Id(customer_id);
+    }
+
+    public void deleteById(String iban) {
+        checkingAccountRepository.deleteById(iban);
     }
 
 }
