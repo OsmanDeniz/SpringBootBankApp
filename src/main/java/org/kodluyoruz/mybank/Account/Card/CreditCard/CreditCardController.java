@@ -1,6 +1,10 @@
 package org.kodluyoruz.mybank.Account.Card.CreditCard;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.AllArgsConstructor;
+import org.kodluyoruz.mybank.Account.CheckingAccount.CheckingAccount;
+import org.kodluyoruz.mybank.Account.CheckingAccount.CheckingAccountService;
+import org.kodluyoruz.mybank.Account.MoneyManagement.Converter.MoneyConverter;
 import org.kodluyoruz.mybank.Account.MoneyManagement.Shopping.Shopping;
 import org.kodluyoruz.mybank.Account.MoneyManagement.Shopping.ShoppingService;
 import org.kodluyoruz.mybank.Customer.Customer;
@@ -9,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +25,8 @@ public class CreditCardController {
     private final CreditCardService cardService;
     private final CustomerService customerService;
     private final ShoppingService shoppingService;
-
+    private final CheckingAccountService checkingAccountService;
+//    MoneyConverter moneyConverter;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -33,25 +39,6 @@ public class CreditCardController {
 
         return cardService.create(cardDto.toCreditCard()).toCreditCardDto();
 
-    }
-
-    @PostMapping("/debt/atm")
-    public HttpStatus payCreditCardDebt(@PathVariable(name = "id") Integer customerId, @RequestParam String cardNumber, @RequestParam Double price) {
-        CreditCard creditCard = cardService.findByCardNumber(cardNumber);
-
-        if (creditCard == null)
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Kart bulunamadi");
-
-        if (creditCard.getCreditCardCustomer().getId() != customerId)
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Odeme yapilacak kart musteriye ait degil");
-
-        if (price <= 0) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Lutfen para yatirin.");
-
-        creditCard.setBalance(creditCard.getBalance() + price);
-        creditCard.setDebt(creditCard.getDebt() - price);
-        cardService.update(creditCard);
-
-        return HttpStatus.OK;
     }
 
     @GetMapping
@@ -67,13 +54,25 @@ public class CreditCardController {
         return creditCard;
     }
 
-    @GetMapping("/debt")
-    public Double creditCardDebt(@RequestParam String cardNumber) {
-        CreditCard creditCard = cardService.findByCardNumber(cardNumber);
+    @DeleteMapping
+    public void deleteCreditCard(@RequestParam String creditCardNumber, @PathVariable("id") int customer_id) {
+
+        CreditCard creditCard = cardService.findByCardNumber(creditCardNumber);
+
         if (creditCard == null)
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Kredi karti bulunamadi.");
 
-        return creditCard.getDebt();
+        if (creditCard.getCreditCardCustomer().getId() != customer_id)
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Kredi karti ile musteri uyumsuz");
+
+        if (creditCard.getDebt() > 0) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Kredi kartina ait borc oldugundan bu kart silinemez.");
+        }
+
+        creditCard.setCreditCardCustomer(null);
+        cardService.update(creditCard);
+
+        cardService.deleteCreditCard(creditCardNumber);
     }
 
     @GetMapping("/status")
@@ -102,26 +101,65 @@ public class CreditCardController {
         return filteredShoppingList;
     }
 
-
-    @DeleteMapping
-    public void deleteCreditCard(@RequestParam String creditCardNumber, @PathVariable("id") int customer_id) {
-
-        CreditCard creditCard = cardService.findByCardNumber(creditCardNumber);
-
+    @GetMapping("/debt")
+    public Double creditCardDebt(@RequestParam String cardNumber) {
+        CreditCard creditCard = cardService.findByCardNumber(cardNumber);
         if (creditCard == null)
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Kredi karti bulunamadi.");
 
-        if (creditCard.getCreditCardCustomer().getId() != customer_id)
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Kredi karti ile musteri uyumsuz");
+        return creditCard.getDebt();
+    }
 
-        if (creditCard.getDebt() > 0) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Kredi kartina ait borc oldugundan bu kart silinemez.");
-        }
+    @PostMapping("/debt/atm")
+    @ResponseStatus(value = HttpStatus.OK, reason = "ATM'den kredi karti odemesi basariyla gerceklesti.")
+    public void payCreditCardDebtFromATM(@PathVariable(name = "id") Integer customerId, @RequestParam String cardNumber, @RequestParam Double price) {
+        CreditCard creditCard = cardService.findByCardNumber(cardNumber);
 
-        creditCard.setCreditCardCustomer(null);
+        if (creditCard == null)
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Kart bulunamadi");
+
+        if (creditCard.getCreditCardCustomer().getId() != customerId)
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Odeme yapilacak kart musteriye ait degil");
+
+        if (price <= 0) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Lutfen para yatirin.");
+
+        creditCard.setBalance(creditCard.getBalance() + price);
+        creditCard.setDebt(creditCard.getDebt() - price);
+        cardService.update(creditCard);
+    }
+
+    @PostMapping("/debt/checking")
+    @ResponseStatus(value = HttpStatus.OK, reason = "Hesaptan kredi karti odemesi basariyla gerceklesti.")
+    @Transactional
+    public void payCreditCardDebtFromCheckingAccount(@PathVariable(name = "id") Integer customerId, @RequestParam String cardNumber, @RequestParam String checkingAccountIban, @RequestParam Double price) throws JsonProcessingException {
+        CreditCard creditCard = cardService.findByCardNumber(cardNumber);
+        CheckingAccount checkingAccount = checkingAccountService.findByIban(checkingAccountIban);
+
+        if (creditCard == null)
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Kart bulunamadi");
+
+        if (creditCard.getCreditCardCustomer().getId() != customerId)
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Odeme yapilacak kart musteriye ait degil");
+
+        if (price > checkingAccount.getBalance())
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Hesap bakiyesi yetersiz.");
+
+
+        if (checkingAccount.getCurrency() != creditCard.getCurrency())
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Hesap para birimi ile kart para birimi ayni olmalidir.");
+            //price = moneyConverter.convertXtoY(price, checkingAccount.getCurrency(), creditCard.getCurrency());
+
+        if (price > creditCard.getDebt())
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Kart borcundan fazla odeme yapilamaz. \n Guncel borc : " + creditCard.getDebt());
+
+        creditCard.setBalance(creditCard.getBalance() + price);
+        creditCard.setDebt(creditCard.getDebt() - price);
         cardService.update(creditCard);
 
-        cardService.deleteCreditCard(creditCardNumber);
+        checkingAccount.setBalance(checkingAccount.getBalance() - price);
+        checkingAccountService.update(checkingAccount);
+
+
     }
 
 
