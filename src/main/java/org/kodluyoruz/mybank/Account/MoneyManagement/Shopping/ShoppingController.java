@@ -30,7 +30,7 @@ public class ShoppingController {
     @PostMapping
     public ShoppingDto create(@RequestBody ShoppingDto shoppingDto, @RequestParam String cardNumber) throws Exception {
         BaseCard baseCard = isExistsCardAndReturnCard(cardNumber);
-        if (baseCard == null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Gecersiz Kart Bilgisi");
+        if (baseCard.equals(null)) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Gecersiz Kart Bilgisi");
         shoppingDto.setCardId(Collections.singleton(baseCard));
 
         if (baseCard instanceof CashCard) {
@@ -63,6 +63,7 @@ public class ShoppingController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Yetersiz Bakiye");
         creditCard.setBalance(creditCard.getBalance() - shoppingDto.getPrice());
         shoppingDto.setCurrency(creditCard.getCurrency());
+        creditCard.setDebt(creditCard.getDebt() + shoppingDto.getPrice());
     }
 
 
