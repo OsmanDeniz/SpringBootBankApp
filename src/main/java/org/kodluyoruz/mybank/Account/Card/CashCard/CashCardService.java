@@ -22,4 +22,8 @@ public class CashCardService {
         return cardRepository.existsCashCardByCardNumber(cardNumber);
     }
 
+    public void deleteById(String cardNumber) {
+        cardRepository.deleteById(cardNumber);
+    }
+
 }
