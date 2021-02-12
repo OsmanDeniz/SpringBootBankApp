@@ -1,6 +1,5 @@
 package org.kodluyoruz.mybank.Account.DepositAccount;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,6 +9,7 @@ import org.kodluyoruz.mybank.Account.AccountType.AccountType;
 import org.kodluyoruz.mybank.Customer.Customer;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Entity
@@ -25,26 +25,30 @@ public class DepositAccount {
     private String iban;
     private String currency = "TRY";
     private double balance;
+    private double interest_rate;
+    private int investment_day;
     private LocalDateTime created_at = LocalDateTime.now();
     private boolean status = true;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "account_type_id")
+    @NotNull
     private AccountType accountType;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "customer_id")
-    @JsonIgnore
-    private Customer customer_id;
+    @ManyToOne
+    @JoinColumn(name = "customerId")
+    private Customer customerId;
 
     public DepositAccountDto toDepositAccountDto() {
 
 
         return DepositAccountDto.builder()
                 .iban(this.iban)
-                .customer_id(this.customer_id)
+                .customerId(this.customerId)
                 .currency(this.currency)
                 .balance(this.balance)
+                .interest_rate(this.interest_rate)
+                .investment_day(this.investment_day)
                 .created_at(this.created_at)
                 .accountType(this.accountType)
                 .status(this.status).build();
