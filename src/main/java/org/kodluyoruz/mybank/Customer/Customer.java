@@ -48,7 +48,7 @@ public class Customer {
     @JsonIgnore
     private Set<CheckingAccount> checkingAccount;
 
-    @OneToMany(mappedBy = "customer_id", targetEntity = DepositAccount.class)
+    @OneToMany(mappedBy = "customerId", targetEntity = DepositAccount.class)
     @JsonIgnore
     private Set<DepositAccount> depositAccount;
 
