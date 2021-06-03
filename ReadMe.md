@@ -46,3 +46,13 @@ Hata durumları uygun şekilde ele alınmalı ve hatalara uygun responselar üre
 
 Uygulama genelinde Spring Boot, Spring MVC ve JPA kullanılmalı, clean code ve SOLID prensiplerine uyulmalı, unit testler 
 eklenmelidir.
+
+### Açıklama
+
+- Spring Boot
+- Lombok
+- RestApi
+- Spring Security
+
+
+Uygulama tamamlanmış olup ilgili görseller en kısa sürede eklenecektir.
